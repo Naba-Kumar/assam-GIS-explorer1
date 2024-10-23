@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{>head}}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+    <div class=" " id="">
+        <div class=" ">
+            <a href="/catalog" class="nav-item nav-link active"><span class="material-symbols-outlined">arrow_back</span></a>
+        </div>
+    </div>
+    <a href="index.html" class="navbar-brand d-flex align-items-center px-1 px-lg-1">
+        <a href="#" class="navbar-brand">
+            <img src="/image/fav.png" alt="Icon" width="60" height="60" class="d-inline-block align-top">
+        </a>
+    </a>
+    <h4 class="m-0 text-black">Assam GIS Explorer</h4>
+</nav>
+
+<!-- Service Start -->
+<div class="container" id="mapcont">
+    <div class="text-center mx-auto mb-5 wow " style="max-width: 600px;">
+        <h1>Our GeoSpatial Data Catalog</h1>
+    </div>
+    <div class="d-flex">
+
+        <div id="map" class="" style="height: 70vh; width:50vw;"></div>
+        <div id="requestform" class="" style="height: 70vh; width:50vw; background-color:blanchedalmond">
+            <button type="button" class="btn btn-info m-4" style="width: 85%;"   id="data-request-form-btn">view request form</button>
+            {{!-- <div class="row row-cols-lg-auto g-3 align-items-center p-3"> --}}
+                <form class="align-items-center request-form" id="data-request-form">
+                            <div id="fieldValuePairs">
+                            </div>
+                            <div class="row align-items-center p-4">
+                                <div class="col-6">
+                                <button data-mdb-ripple-init type="submit" class="btn btn-secondary w-100" onclick="FieldValuePair('add')">Add Filter +</button>
+                                </div>
+
+                                <div class="col-6">
+                                <button data-mdb-ripple-init type="submit" class="btn btn-secondary w-100" onclick="FieldValuePair('remove')">Remove Filter -</button>
+                                </div>
+
+                                <div class="col-12">
+                                <button data-mdb-ripple-init type="submit" class="btn btn-success w-100" id="file-rq-btn">Request</button>
+                                </div>
+
+
+                            </div>
+
+                </form>
+
+            {{!-- </div> --}}
+
+        </div>
+    </div>
+    <div class="row pt-1">
+                  <div class="col-12 mb-3">
+                    {{!-- <h6>Most Viewed</h6> --}}
+                        {{#each catalogItems}}
+
+                    <h3 class="text-muted">{{title}}</h3>
+                        {{/each}}
+
+                  </div>
+                </div>
+    </div>
+<!-- Service End -->
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ol@v9.2.4/dist/ol.js"></script>
+<script>
+
+document.getElementById("data-request-form-btn").addEventListener('click', function() {
+    document.getElementById("data-request-form").style.display = 'block';
+});
+
+const fieldValuePairsContainer = document.getElementById('fieldValuePairs');
+
+{{#each catalogItems}}
+const layerUrl = `http://localhost:8080/geoserver/{{workspace}}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName={{workspace}}:{{file_name}}&outputFormat=application%2Fjson`;
+{{/each}}
+
+let pairCount = 0;
+let selectedFields = [];
+
+// Fetch fields from WMS/WFS
+function fetchFields(layerUrl, dropdownId) {
+    fetch(layerUrl)
+        .then(response => response.json())
+        .then(data => {
+            let fields = Object.keys(data.features[0].properties);
+            populateFieldDropdown(fields, dropdownId);
+        });
+}
+
+function FieldValuePair(add) {
+    event.preventDefault();
+    if (add === 'add') {
+        pairCount++;
+        const currentPairCount = pairCount; // Capture the current value of pairCount
+        const newPair = document.createElement('div');
+        newPair.className = 'dropdown';
+        newPair.id = `fieldValuePair${currentPairCount}`;
+        newPair.innerHTML = `
+            <div class="row px-4">
+                 ${currentPairCount === 1 ? `<div class="col-2">
+                    <label for="operator${currentPairCount}">operator</label>
+                    <select class="form-control" id="operator${currentPairCount}Dropdown">
+                    </select>
+                </div>` : `
+                <div class="col-2">
+                    <label for="operator${currentPairCount}">operator</label>
+                    <select class="form-control" id="operator${currentPairCount}Dropdown">
+                          <option value="OR">OR</option>
+                          <option value="AND">AND</option>
+                    </select>
+                </div>
+                `}
+                <div class="col-5">
+                    <label for="field${currentPairCount}">Field ${currentPairCount}</label>
+                    <select class="select form-control" id="field${currentPairCount}Dropdown">
+                    <option value="">None</option>
+                    </select>
+                </div>
+                <div class="col-5">
+                    <label for="value${currentPairCount}">Value For Field ${currentPairCount}</label>
+                    <select class="form-control" id="value${currentPairCount}Dropdown">
+                          <option value="">None</option>
+
+                    </select>
+                </div>
+            </div>
+        `;
+        fieldValuePairsContainer.appendChild(newPair);
+        fetchFields(layerUrl, `field${currentPairCount}Dropdown`);
+        
+        // Add event listener to the new field dropdown
+        document.getElementById(`field${currentPairCount}Dropdown`).addEventListener('change', function () {
+            fetchValues(layerUrl, this.value, `value${currentPairCount}Dropdown`, currentPairCount);
+            
+        });
+
+        // Add event listener to the new value select
+        document.getElementById(`value${currentPairCount}Dropdown`).addEventListener('change', function () {
+            let field = document.getElementById(`field${currentPairCount}Dropdown`).value;
+            let value = this.value;
+            selectedFields[currentPairCount - 1] = { field, value }; // Capture selection immediately
+            console.log('Selected Fields Updated:', selectedFields); // Debug log
+        });
+    } else {
+        let newPair = document.getElementById(`fieldValuePair${pairCount}`);
+        fieldValuePairsContainer.removeChild(newPair);
+        selectedFields.pop(); // Remove the last selected field and value
+        pairCount--;
+        console.log('Selected Fields Updated (After Removal):', selectedFields); // Debug log
+    }
+}
+
+function populateFieldDropdown(fields, dropdownId) {
+    let dropdown = document.getElementById(dropdownId);
+    fields.forEach(field => {
+        let option = document.createElement('option');
+        option.value = field;
+        option.text = field;
+        dropdown.appendChild(option);
+    });
+}
+
+// Fetch values for selected field
+function fetchValues(layerUrl, selectedField, dropdownId) {
+        fetch(layerUrl)
+            .then(response => response.json())
+            .then(data => {
+                let values = [...new Set(data.features.map(f => f.properties[selectedField]))];
+                populateValueDropdown(values, dropdownId);
+            });
+}
+
+function populateValueDropdown(values, dropdownId) {
+    let dropdown = document.getElementById(dropdownId);
+    values.forEach(value => {
+        let option = document.createElement('option');
+        option.value = value;
+        option.text = value;
+        dropdown.appendChild(option);
+    });
+}
+
+
+
+document.getElementById("file-rq-btn").addEventListener('click', async function(){
+    event.preventDefault()
+    console.log("file-rq-btn")
+    let requestData = { fields: [], values: [], operators: [] };
+    for (let i = 1; i <= pairCount; i++) {
+        let field = document.getElementById(`field${i}Dropdown`).value;
+        let value = document.getElementById(`value${i}Dropdown`).value;
+        let operator = document.getElementById(`operator${i}Dropdown`).value;
+
+        if (field && value) {
+            requestData.fields.push(field);
+            requestData.values.push(value);
+        }
+        if (i>1) {
+            requestData.operators.push(operator);
+        }
+    }
+    {{#each catalogItems}}
+
+    fetch(`{{file_name}}/filerequest`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData)
+    }).then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data) {
+            Swal.fire({
+                title: data.title,
+                text: data.message,
+                confirmButtonText: "OK",
+
+                icon: data.icon
+            }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        if(data.redirect != undefined){
+                            window.location.href = data.redirect; // Replace with your desired URL
+                        }
+                    } 
+                  });
+        } // Handle the response data
+    });
+            {{/each}}
+}) 
+
+document.addEventListener("DOMContentLoaded", function () {
+    {{#each catalogItems}}
+    console.log(`{{workspace}}:{{file_name}}`)
+    const map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            }),
+            new ol.layer.Tile({
+                source: new ol.source.TileWMS({
+                    url: 'http://127.0.0.1:8080/geoserver/wms',
+                    params: { 'LAYERS': `{{workspace}}:{{file_name}}`, 'TILED': true },
+                    serverType: 'geoserver',
+                    transition: 0,
+                })
+            })
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([93.5, 26]),
+            zoom: 6
+        })
+    });
+    {{/each}}
+});
+
+
+</script>
+{{>footer}}
+</body>
+</html>

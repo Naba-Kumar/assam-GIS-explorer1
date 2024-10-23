@@ -1,0 +1,196 @@
+{{>adminhead}}
+<div class="wrapper">
+ <div id="placeholder" class="js-sidebar"></div>
+    <aside id="sidebar" class="js-sidebar">
+        <!-- Content For Sidebar -->
+        <div class="h-100">
+            <div class="sidebar-logo">
+                <a href="#">Assam Gis Explorer</a>
+            </div>
+            <ul class="sidebar-nav">
+                {{!-- <li class="sidebar-header">
+                    Admin Elements
+                </li> --}}
+                <hr>
+
+                <li class="sidebar-item">
+                    <a href="/admin/home" class="sidebar-link">
+                        <span class="material-symbols-outlined">home</span>
+                        Home
+                    </a>
+                </li>
+                {{!-- <div class="hr"></div> --}}
+
+                <li class="sidebar-item">
+                    <a href="/admin/requests" class="sidebar-link">
+                        <span class="material-symbols-outlined">data_table</span> Requests
+                    </a>
+                </li>
+                {{!-- <div class="hr"></div> --}}
+                <li class="sidebar-item">
+                    <a href="/admin/isolated" class="sidebar-link">
+                        <span class="material-symbols-outlined">data_info_alert</span> Isolated Requests
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="/admin/privilege" class="sidebar-link">
+                        <span class="material-symbols-outlined">admin_panel_settings</span> Manage privilege
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/admin/search" class="sidebar-link">
+                        <span class="material-symbols-outlined">manage_search</span> Search User
+                    </a>
+                </li>
+                {{!-- <div class="hr"></div> --}}
+
+                <li class="sidebar-item">
+                    <a href="/admin/upload" class="sidebar-link">
+                        <span class="material-symbols-outlined">cloud_upload</span> Uploads
+                    </a>
+                </li>
+                {{!-- <div class="hr"></div> --}}
+
+                <li class="sidebar-item active">
+                    <a href="/admin/catalog" class="sidebar-link">
+                        <span class="material-symbols-outlined">grid_view</span> Add To Catalog
+                    </a>
+                </li>
+                {{!-- <div class="hr"></div> --}}
+
+
+                <li class="sidebar-item">
+                    <a href="/admin/manage" class="sidebar-link">
+                        <span class="material-symbols-outlined">bookmark_manager</span>
+                        Manage catalog
+                    </a>
+                </li>
+                {{!-- <div class="hr"></div> --}}
+
+                <li class="sidebar-item">
+                    <a href="/admin/delete" class="sidebar-link">
+                        <span class="material-symbols-outlined">delete</span>
+                        Delete Parmanent
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a href="/admin/Queries" class="sidebar-link">
+                        <span class="material-symbols-outlined">quiz</span>
+                        Queries
+                    </a>
+                </li>
+                {{!-- <div class="hr"></div> --}}
+
+
+                <li class="sidebar-item" id="adminLogout">
+                    <a class="sidebar-link">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </a>
+                </li>
+                <div class="hr"></div>
+
+
+
+
+            </ul>
+        </div>
+    </aside>
+
+    <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+            <button class="btn" id="sidebar-toggle" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse navbar">
+                <div class="">
+                    <h4 class="mt-2">Admin Dashboard</h4>
+                </div>
+            </div>
+        </nav>
+        <main class="content px-3 py-2  bg-adminbg">
+            <div class="container-fluid rounded bg-cardbg p-4 mt-4 col-md-6">
+
+
+                <!-- Table Element -->
+                <form id="adminCatalogForm" class="form" action="" method="post">
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="form-group first">
+                                <label for="file_name">File Name</label>
+                                <select id="file_name" class="form-control" name="file_name">
+                                    <option value="">Select File Name</option>
+                                    {{#each catalogItems}}
+                                    <option value="{{this.file_name}}">{{this.file_name}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="form-group first">
+                                <label for="file_id">File Id *</label>
+                                <input type="text" class="form-control" placeholder="e.g. Assam Boundary" value=""
+                                    name="file_id" id="file_id">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="form-group first">
+                                <label for="workspace">Geoserver Workspace <span class="text-danger">*</span><span
+                                        class="text-danger"></span></label>
+                                <select class="form-control" id="workspace" name="workspace">
+                                    <option value="">Select Workspace</option>
+                                    <option value="agis">agis</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="form-group first">
+                                <label for="store">Geoserver Store <span class="text-danger">*</span><span
+                                        class="text-danger"></span></label>
+                                <select class="form-control" id="store" name="store">
+                                    <option value="">Select Store</option>
+                                    <option value="repository">Repository</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="form-group first">
+                                <label for="title">Title *</label>
+                                <input type="text" class="form-control" placeholder="e.g. Assam Boundary" id="title"
+                                    name="title">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="form-group last mb-3">
+                                <label for="description">Description*</label>
+                                <textarea class="form-control" placeholder="Description" id="description"
+                                    name="description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Add To Catalog" class="btn px-5 btn-primary mt-2">
+                </form>
+
+            </div>
+        </main>
+
+
+    </div>
+</div>
+{{>footer}}

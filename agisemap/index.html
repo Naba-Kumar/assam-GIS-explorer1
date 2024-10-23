@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+
+
+  <link rel="icon" type="image/x-icon" href="./public/fav.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./lib/dist/ol-ext.min.css">
+  <!-- <link rel="nofollow" href=''> -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="./public/css/style.css">
+  <link rel="stylesheet" href="./public/css/sidebar.css">
+  <link rel="stylesheet" href="./public/css/mediaStyle.css">
+
+  <title>Assam Map Portal</title>
+</head>
+
+
+<body id="body">
+
+
+
+  <div class="container">
+    <nav id="nav_bar">
+
+
+      <button type="button" class="menu_sidebar_container-toggle">
+        <div id="menu_open" class="material-symbols-outlined">menu</div>
+        <div id="menu_close" class="material-symbols-outlined">menu_open</div>
+      </button>
+      <div id="logo">
+        <img src="https://assac.in/img/fav.png" alt="">
+      </div>
+      <div id="nav_title">
+        <h2>ASSAM STATE SPACE APPLICATION CENTER</h2>
+
+      </div>
+    </nav>
+
+    <div class="menu_sidebar_container">
+
+
+      <nav class="menu">
+
+        <ul class="side_menu_cat1">
+          <div class="side_menu_container_optins">
+
+            <li onclick="display_toggle_block('admin_state')">Admin State</li>
+            <ul class="side_menu_optin_block, side_menu_cat2" id="admin_state">
+
+              <li onclick="display_toggle_block_adminState('Boudaries')">Boudaries</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Boudaries">
+                <li>
+                  <input type="checkbox" id="stateboundary" class="layer-checkbox">
+                  <label for=" stateboundary"> State Boundary</label>
+                </li>
+                <li>
+                  <input type="checkbox" id="DistrictBoundary" class="layer-checkbox">
+                  <label for="DistrictBoundary">District Boundary</label>
+                </li>
+                <li>
+                  <input type="checkbox" id="TalukaBoundary" class="layer-checkbox">
+                  <label for="TalukaBoundary"> Taluka Boundary</label>
+                </li>
+                <li>
+                  <input type="checkbox" id="VillageBoundary" class="layer-checkbox">
+                  <label for="VillageBoundary">Village Boundary</label>
+                </li>
+
+                <li>
+                  <input type="checkbox" id="Grampanchayat" class="layer-checkbox">
+                  <label for="Grampanchayat"> Grampanchayat</label>
+                </li>
+
+              </ul>
+              </li>
+
+              <li onclick="display_toggle_block_adminState('Transport')">Transport</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Transport">
+                <li> <input type="checkbox"> State Highway</li>
+                <li> <input type="checkbox"> Major Roads</li>
+                <li> <input type="checkbox"> Major State Highway</li>
+                <li> <input type="checkbox"> Major State Highway</li>
+              </ul>
+              </li>
+
+              <li onclick="display_toggle_block_adminState('Forest')">Forest</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Forest">
+                <li> <input type="checkbox"> <label for=""> Forest1 </label></li>
+                <li> <input type="checkbox"> <label for=""> Forest2 </label></li>
+                <li> <input type="checkbox"> <label for=""> Forest3 </label></li>
+              </ul>
+              </li>
+
+              <li onclick="display_toggle_block_adminState('Water')">Water</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Water">
+                <li> <input type="checkbox"> <label for="">w1</label> </li>
+                <li> <input type="checkbox"> <label for="">w2</label> </li>
+                <li> <input type="checkbox"> <label for="">w3</label> </li>
+              </ul>
+              </li>
+
+              <li onclick="display_toggle_block_adminState('Soil')">Soil</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Soil">
+                <li> <input type="checkbox"> <label for="">s1</label> </li>
+                <li> <input type="checkbox"> <label for="">s2</label> </li>
+                <li> <input type="checkbox"> <label for="">s3</label> </li>
+              </ul>
+              </li>
+
+
+
+              <li onclick="display_toggle_block_adminState('Electoral')">Electoral</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Electoral">
+                <li> <input type="checkbox"> <label for=""> Loksabha Boundaries</label></li>
+                <li> <input type="checkbox"> <label for=""> Assembly Boundaries</label></li>
+              </ul>
+              </li>
+
+              <li onclick="display_toggle_block_adminState('Anganwadi')">Anganwadi</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Anganwadi">
+                <li> <input type="checkbox"> <label for=""> A1 </label></li>
+                <li> <input type="checkbox"> <label for=""> A2 </label></li>
+                <li> <input type="checkbox"> <label for=""> A3 </label></li>
+              </ul>
+              </li>
+
+              <li onclick="display_toggle_block_adminState('Hospital')">Hospital Loaction</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Hospital">
+                <li> <input type="checkbox"> <label for=""> District Hospital </label></li>
+                <li> <input type="checkbox"> <label for=""> Government Hospital </label></li>
+                <li> <input type="checkbox"> <label for=""> Institute </label></li>
+                <li> <input type="checkbox"> <label for=""> Primary Health Center </label></li>
+                <li> <input type="checkbox"> <label for=""> Rural Hospital </label></li>
+                <li> <input type="checkbox"> <label for=""> Ridgecrest Regional Hospital </label></li>
+                <li> <input type="checkbox"> <label for=""> Subdistrict Hospital 50 </label></li>
+                <li> <input type="checkbox"> <label for=""> Subdistrict Hospital 100 </label></li>
+                <li> <input type="checkbox"> <label for=""> Trauma Care Unit </label></li>
+                <li> <input type="checkbox"> <label for=""> Urban Community Health Center </label></li>
+                <li> <input type="checkbox"> <label for=""> Urban Primary Health Center </label></li>
+                <li> <input type="checkbox"> <label for=""> Women Hospital </label></li>
+
+
+
+
+              </ul>
+              </li>
+
+              <li onclick="display_toggle_block_adminState('School')">School</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="School">
+                <li>
+                  <input type="checkbox" id="ssa" class="layer-checkbox">
+                  <label for="ssa"> School</label>
+                </li>
+              </ul>
+              </li>
+
+
+
+
+              <li onclick="display_toggle_block_adminState('Warehouse')">Warehouse Location</li>
+              <ul class="side_menu_optin_block, side_menu_cat3" id="Warehouse">
+                <li> <input type="checkbox"> <label for=""> Warehouse1 </label></li>
+                <li> <input type="checkbox"> <label for=""> Warehouse2 </label></li>
+                <li> <input type="checkbox"> <label for=""> Warehouse3 </label></li>
+              </ul>
+              </li>
+
+            </ul>
+          </div>
+
+
+          <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('village_search')">Search Village</li>
+            <div class="side_menu_cat2" id="village_search">
+              <form id="filterFormVillage">
+                <label for="state">Select District:</label>
+                <select id="village-dist" name="district">
+                  <option value="">Select District</option>
+                </select>
+
+                <label for="state">Select Circle:</label>
+                <select id="village-circle" name="circle">
+                  <option value="">Select Circle</option>
+                </select>
+
+                <label for="state">Select Village:</label>
+                <select id="village-village" name="village">
+                  <option value=''>Select Village</option>
+                </select>
+              </form>
+              <button id="village_selectButton_mask">Mask</button>
+              <button id="village_selectButton_highlight">Highlight</button>
+              <button id="village_selectButton_clear">Clear</button>
+
+
+            </div>
+          </div>
+
+          <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('assam_state_dist_search')">Search Assam</li>
+            <div class="side_menu_cat2" id="assam_state_dist_search">
+              <form id="assamFilterForm">
+                <label for="assam-state">Select State:</label>
+                <select id="assam-state" name="state">
+                  <option value="assam">Assam</option>
+                </select>
+
+                <label for="assam-district">Select District:</label>
+                <select id="assam-district" name="district">
+                  <option value="">Select District</option>
+                </select>
+
+              </form>
+              <button id="assam-state-dist-mask">Mask</button>
+              <button id="assam-state-dist-highlight">Highlight</button>
+              <button id="assam-state-dist-clear">clear</button>
+
+
+            </div>
+          </div>
+
+
+          <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('ssadata_search')">Search School 2022</li>
+            <div class="side_menu_cat2" id="ssadata_search">
+              <form id="filterFormSSA">
+                <label for="Schoolcat">Select School Catagory:</label>
+                <select id="ssa-cat" name="Schoolcat">
+                  <option value="0">ALL</option>
+                  <option value="1">Primary only</option>
+                  <option value="2">Upper Primary</option>
+                  <option value="3">Primary with UP and secondary</option>
+                  <option value="4">Upper Primary only</option>
+                  <option value="5">Secondary only</option>
+
+                  <option value="6">H R Secondary only</option>
+                  <option value="7">Upper Primary and Secondary</option>
+                  <option value="8">Secondary and HR Secondary</option>
+                  <option value="10">Secondary with Hr. Secondary</option>
+                  <option value="11">Hr. Secondary only/Jr. College</option>
+
+
+
+                </select>
+                <label for="District">Select District:</label>
+                <select id="ssa-dist" name="district">
+                  <option value="">Select District</option>
+                </select>
+
+                <label for="Block">Select Block:</label>
+                <select id="ssa-circle" name="block">
+                  <option value="">Select Block</option>
+                </select>
+
+                <label for="Village">Select Village:</label>
+                <select id="ssa-village" name="village">
+                  <option value="">Select Village</option>
+                </select>
+
+                <label for="School">Select School:</label>
+                <select id="ssa-school" name="school">
+                  <option value="">Select School</option>
+                </select>
+              </form>
+              <button id="ssa_selectButton">Select</button>
+              <button id="ssa_clearButton">Clear</button>
+
+            </div>
+          </div>
+
+          <!-- <div id="villageDetails"></div> -->
+          <!-- <div id="schoolHoverPopup" style="position: absolute; display: none; background: white; border: 1px solid black; padding: 5px;"></div> -->
+
+
+
+
+
+
+          <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('buffer_search')">Create Buffer</li>
+            <div class="side_menu_cat2" id="buffer_search">
+              <form id="bufferForm">
+                <label for="layer">Select Layer:</label>
+                <select id="Buffer-layer" name="layer">
+                  <option value="ssa2022">SSA Data 2022</option>
+                  <option value="village">Village Data</option>
+                </select>
+
+
+                <label for="School">Enter Radious in [m]:</label>
+                <input type="number" id="buffer-radius" placeholder="Enter Radious in meter">
+
+              </form>
+              <button id="createBuffer">Create</button>
+              <button id="clearBuffer">Clear</button>
+
+            </div>
+          </div>
+
+
+          <!-- nearby -->
+
+          <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('Unfiltered_search')">Unfiltered Search</li>
+            <div class="side_menu_cat2" id="Unfiltered_search">
+              <form id="UnfilteredForm">
+                <label for="dsearch-layer">Select Layer:</label>
+                <select id="dsearch-layer" name="dsearch-layer">
+                  <!-- <option value="ssa2022">SSA Data 2022</option> -->
+                  <option value="village">Village Data</option>
+                </select>
+
+                <label for="dsearch-input">Select Name:</label>
+                <input type="text" id="dsearch-input" list="dsearch-datalist" placeholder="Type or select a name...">
+                <datalist id="dsearch-datalist"></datalist>
+              </form>
+              <button id="DirSearch">Search</button>
+              <button id="DirSearchclr">Clear</button>
+            </div>
+          </div>
+
+
+          <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('upload')">Upload</li>
+            <div class="side_menu_cat2" id="upload">
+              <label for="fileInput">Choose <span style="color: red; font-size: .9em;"> .GeoJSON or .csv</span> </label>
+              <input type="file" id="fileInput" accept=".Geojson, .json, .csv, .kml">
+              <button id="uploadButton">Upload</button>
+            </div>
+          </div>
+
+
+          <!-- <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('Swipe')">Swipe Tool</li>
+            <div class="select-container, side_menu_cat2" id="Swipe">
+              <select id="layerSelect">
+                <option value="Terrain"> Terrain</option>
+                <option value="Forest">Forest</option>
+              </select>
+              <br>
+              <input type="submit" value="Swipe">
+              <input type="reset" value="Clear">
+            </div>
+            
+          </div> -->
+
+          <div class="side_menu_container_optins">
+            <li onclick="display_toggle_block('geocode')">Geocode Locator</li>
+            <div class="select-container, side_menu_cat2" id="geocode">
+              <label for="Search_area">Search : </label>
+              <input type="text" id="locationInput" placeholder="Enter location name">
+              <br>
+              <button id="clearButton" onclick="clearLocation()">Clear</button>
+              <div id="resultContainer" class="result-container">
+                <!-- Results will be displayed here -->
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </ul>
+      </nav>
+      <div id="sidebar">
+        <ul>
+          <li class="sidebar_items" onclick="handleZoom('zIn')">
+            <span class="material-symbols-outlined">zoom_in</span>
+          </li>
+
+          <li class="sidebar_items" onclick="handleZoom('zOut')">
+            <span class="material-symbols-outlined">zoom_out</span>
+          </li>
+
+          <li class="sidebar_items" id="home_btn" onclick="handleHome(home_btn)">
+            <span class="material-symbols-outlined">home</span>
+          </li>
+
+          <li class="sidebar_items" onclick="fullscreen_click()">
+            <span class="material-symbols-outlined" id="fullscreen_in"
+              onclick="handleFullscreen('easeIn')">fullscreen</span>
+            <span class="material-symbols-outlined" id="fullscreen_out"
+              onclick="handleFullscreen('easeOut')">Fullscreen_exit</span>
+          </li>
+
+          <li class="sidebar_items" onclick="display_toggle('edit_tool')">
+            <span class="material-symbols-outlined">edit</span>
+            <ul id="edit_tool" class="sub-menu">
+              <li onclick="handleDraw('Point')"><span class="material-symbols-outlined">radio_button_checked</span></li>
+              <li onclick="handleDraw('LineString')"><span class="material-symbols-outlined">timeline</span></li>
+              <li onclick="handleDraw('Polygon')"><span class="material-symbols-outlined">hexagon</span></li>
+              <li onclick="handleDraw('Circle')"><span class="material-symbols-outlined">circle</span></li>
+              <li onclick="handleDraw('freehand')"><span class="material-symbols-outlined">gesture</span></li>
+              <li id="draw_undo"> <span class="material-symbols-outlined">undo</span></li>
+
+              <li onclick="handleDraw('clear')"><span class="material-symbols-outlined">ink_eraser</span></li>
+
+              <li> <a style="color: black;" id="download" download="features.json" href="#"> <span
+                    class="material-symbols-outlined">save</span></a></li>
+
+
+            </ul>
+          </li>
+
+          <li class="sidebar_items" onclick="display_toggle('measure_tool')">
+            <span class="material-symbols-outlined">query_stats</span>
+            <ul id="measure_tool" class="sub-menu">
+              <li onclick="handleMeasure('LineString')"><span class="material-symbols-outlined">straighten</span></li>
+              <li onclick="handleMeasure('Polygon')"><span class="material-symbols-outlined">square_foot</span></li>
+              <li onclick="handleMeasure('clear')"><span class="material-symbols-outlined">ink_eraser</span></li>
+            </ul>
+          </li>
+
+          <li class="sidebar_items" onclick="display_toggle_side_Popup('Print_tool')">
+            <span class="material-symbols-outlined">print</span>
+            <ul id="Print_tool" class="side_menu_popup">
+              <form id="printform">
+                <label for="format">Page size </label>
+                <select id="format">
+                  <option value="a0">A0 (slow)</option>
+                  <option value="a1">A1</option>
+                  <option value="a2">A2</option>
+                  <option value="a3">A3</option>
+                  <option value="a4" selected>A4</option>
+                  <option value="a5">A5 (fast)</option>
+                </select>
+                <label for="resolution">Resolution </label>
+                <select id="resolution">
+                  <!-- <option value="72">72 dpi (fast)</option> -->
+                  <option value="150">150 dpi</option>
+                  <option value="200" selected>200 dpi</option>
+                  <option value="300">300 dpi (slow)</option>
+                </select>
+
+              </form>
+              <button id="dragSelect">select</button>
+              <button id="printButton">Print</button>
+            </ul>
+
+          </li>
+
+
+          </li>
+          <!-- <li class="sidebar_items" onclick="display_toggle_side_Popup('layers_tool')">
+            <span class="material-symbols-outlined">stacks</span>
+            <ul id="layers_tool" class="side_menu_popup">
+
+              <div class="inputGroup">
+                <input type="checkbox" id="rivers" name="rivers" value="rivers_pgis"
+                  onchange="handleLayerToggle(event)">
+                <label for="rivers">rivers</label> <br>
+              </div>
+
+              <div class="inputGroup">
+                <input type="checkbox" id="india_st" name="india_st" value="india_st_pgis"
+                  onchange="handleLayerToggle(event)">
+                <label for="india_st">india states</label> <br>
+              </div>
+
+              <div class="inputGroup">
+                <input type="checkbox" id="dams" name="dams" value="indian_dams" onchange="handleLayerToggle(event)">
+                <label for="dams">dams</label> <br>
+              </div>
+
+              <div class="inputGroup">
+                <input type="checkbox" id="base" name="base" value="osmTile" checked
+                  onchange="handleLayerToggle(event)">
+                <label for="Base">OSM</label> <br>
+              </div>
+              <div class="inputGroup">
+                <input type="checkbox" id="rivers" name="rivers" value="rivers_pgis"
+                  onchange="handleLayerToggle(event)">
+                <label for="rivers">rivers</label> <br>
+              </div>
+
+              <div class="inputGroup">
+                <input type="checkbox" id="india_st" name="india_st" value="india_st_pgis"
+                  onchange="handleLayerToggle(event)">
+                <label for="india_st">india states</label> <br>
+              </div>
+
+              <div class="inputGroup">
+                <input type="checkbox" id="dams" name="dams" value="indian_dams" onchange="handleLayerToggle(event)">
+                <label for="dams">dams</label> <br>
+              </div>
+
+              <div class="inputGroup">
+                <input type="checkbox" id="base" name="base" value="osmTile" checked
+                  onchange="handleLayerToggle(event)">
+                <label for="Base">OSM</label> <br>
+              </div>
+            </ul>
+          </li> -->
+
+          <!--  -->
+
+
+          <!-- Pin Drop -->
+          <li class="sidebar_items">
+            <span class="material-symbols-outlined" onclick="display_toggle_side_Popup('pindrop_tool')">pin_drop</span>
+            <ul id="pindrop_tool" class="sub-menu, side_menu_popup">
+              <form class="form">
+                <label for="lat">Enter Latitude </label>
+                <input type="text" id="lat" placeholder="Latitude" value="">
+
+                <label for="lon">Enter Longitude</label>
+                <input type="text" id="lon" placeholder="Longitude" value="">
+
+              </form>
+              <button id="locate_Pindrop">Pindrop</button>
+              <button id="locate_Pinremove">Remove</button>
+            </ul>
+          </li>
+          <!-- Pin Drop -->
+
+
+          <!-- village -->
+
+          <!-- <li class="sidebar_items" onclick="display_toggle_side_Popup('village_boundary_tool')">
+            <span class="material-symbols-outlined">filter_alt</span>
+            <ul id="village_boundary_tool" class="side_menu_popup boundary_tool">
+
+              <form id="filterFormVillage">
+                <label for="state">Select District:</label>
+                <select id="village-dist" name="district">
+                  <option value="">Select District</option>
+                </select>
+
+                <label for="state">Select Circle:</label>
+                <select id="village-circle" name="circle">
+                  <option value="">Select Circle</option>
+                </select>
+
+                <label for="state">Select Village:</label>
+                <select id="village-village" name="village">
+                  <option value="">Select Village</option>
+                </select>
+              </form>
+              <button id="village_selectButton">Select</button>
+
+
+            </ul>
+          </li> -->
+
+          <!-- village -->
+
+
+
+          <li class="sidebar_items" onclick="display_toggle_side_Popup('boundary_tool')">
+            <span class="material-symbols-outlined">filter_alt</span>
+            <ul id="boundary_tool" class="side_menu_popup boundary_tool">
+
+              <form id="filterForm">
+                <label for="state">Select State:</label>
+                <select id="state" name="state">
+                  <option value="">Select State</option>
+                </select>
+
+                <label for="district">Select District:</label>
+                <select id="district" name="district">
+                  <option value="">Select District</option>
+                </select>
+
+              </form>
+              <button id="selectButton">Select</button>
+
+
+            </ul>
+          </li>
+          <!-- <li class="sidebar_items">
+            <span class="material-symbols-outlined">filter_alt</span>
+            
+          </li> -->
+          <li class="sidebar_items">
+            <span class="material-symbols-outlined" onclick="display_toggle_side_Popup('villageInfo')">info</span>
+            <!-- <ul id="Print_tool" class=""> -->
+            <div id="villageInfo">
+
+              <div id="villageDetails"></div>
+            </div>
+            <!-- </ul> -->
+
+
+          </li>
+
+          <li class="sidebar_items" id="clear_all">
+            <span class="material-symbols-outlined">clear_all</span>
+
+          </li>
+
+          <div id="scale-line-control-cont">
+            <div id='scale-line-control' class="scaleLine">
+            </div>
+          </div>
+
+
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div id="base_layer_container">
+    <div id="base_layer_container_icon"></div>
+    <div id="base_layer_menu">
+      <ul id="base_layer_list" class=".side_menu_popup">
+        <ul id="base_layer_list">
+          <li onclick="handletoggleLayer('osm'), activateOption(this)"> <label for="">O S M</label> <img
+              src="./modules/standardmapimg.jpeg" alt=""> </li>
+          <li onclick="handletoggleLayer('standardLayer'), activateOption(this)"> <label for="">Standard</label> <img
+              src="./modules/standardmapimg.jpeg" alt=""> </li>
+          <li onclick="handletoggleLayer('sateliteLayer'), activateOption(this)"> <label for="">Satelite</label> <img
+              src="./modules/osmmapimg.png" alt=""> </li>
+          <li onclick="handletoggleLayer('transportLayer'), activateOption(this)"> <label for="">Transport</label> <img
+              src="./modules/streetmapimg.avif" alt=""> </li>
+        </ul>
+      </ul>
+    </div>
+
+    <!-- <button id="label0" onclick="handletoggleLabelLayer('labelLayer')"> Label</button> -->
+    <button id="labelState"> State</button>
+    <button id="labelDist"> District</button>
+    <button id="labelVill"> Village</button>
+  </div>
+
+
+
+
+  </div>
+
+
+
+
+
+  <footer>
+    <div>
+      <div id="long_lat">
+        <p>Coordinate :</p>
+
+        <div id="lonlat_display" style="text-align: center;"> </div>
+
+      </div>
+      <div id="org_info">
+        <p> designed and Developed by ASSAC. &copy; 2024</p>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+  <div id="map-view">
+    <div id="map"></div>
+    <!-- <div id="legend" class="legend"> -->
+  </div>
+
+
+  <div id="info">
+    <div id="info-content"></div>
+    <div id="info-toggle"><span class="material-symbols-outlined">close</span> </div>
+  </div>
+
+
+  <div id="villageDetails">fff</div>
+
+  <div id="legend">
+    <div id="colorBox"></div>
+    <span id="span">
+  </div>
+
+
+
+
+
+
+  <div id="aboutSection">
+
+
+  </div>
+
+  <div id="additionalTextSection">
+
+  </div>
+
+  <div id="overlaypopup" class="overlaypopup"></div>
+
+
+  <!-- <div id="tstwndw" style="position: absolute; top: 100px; left: 400px; height: 600px; width: 600px; z-index: 3; background-color: #b8a6a6;"></div> -->
+
+
+
+  <script type="module" src="./main.js"></script>
+
+
+  <script src="./public/js/custom.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+</body>
+
+</html>

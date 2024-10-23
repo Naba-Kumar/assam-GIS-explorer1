@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{>head}}
+</head>
+<body onload="loaderFunc()">
+    {{>homeNav}}
+    <main class="content px-1 py-5 bg-adminbg">
+        <div class="container-fluid  container">
+            
+            <div class="card border-0 rounded bg-tablebg">
+                <div class="card-header">
+                    <h6 class="card-subtitle text-muted p-4 text-center">
+                        Data Request History
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="col">Req Id</th>
+                                <th class="col">File Name</th>
+                                <th class="col">Query</th>
+                                <th class="col-2">Time</th>
+                                <th class="col-1">Checked?</th>
+                                <th class="col-1">Status</th>
+                                <th class="col-1">Download</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-table-body">
+                            {{#each userItems}}
+                                <tr data-email="{{this.requestno}}">
+                                    <td>{{this.requestno}}</td>
+                                    <td>{{this.file_name}}</td>
+                                    <td>{{this.fields}} {{this.values}} {{this.operators}} </td>
+                                    <td>{{this.rtime}}</td>
+
+                                    {{#if this.is_checked}}
+                                        <td class="text-success">Yes</td>
+                                    {{else}}
+                                        <td class="text-secondary">No</td>
+                                    {{/if}}
+
+
+                                    {{#if this.is_checked}}
+                                        {{#if this.request_status}}
+                                            <td class="text-success">Approved</td>
+                                        {{else}}
+                                            <td class="text-danger">Rejected</td>
+                                        {{/if}}
+                                    {{else}}
+                                        <td class="text-secondary">Pending</td>
+                                    {{/if}}
+
+                                    
+                                    {{#ifCond this.request_status '===' true}}
+                                    <td><button class="btn btn-success file-dwnld-btn m-0" data-requestno="{{this.requestno}}">Download</button></td>
+                                    {{else}}
+                                    <td><p>Not Available</p></td>
+                                    {{/ifCond}}
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    {{>homeFooter}}
+        <script>
+    document.querySelectorAll('.file-dwnld-btn').forEach(btn => {
+        btn.addEventListener('click', async function(event) {
+            event.preventDefault();
+            const requestno = this.getAttribute('data-requestno');
+
+            fetch(`download/${requestno}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json', // Optional, based on your API design
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob(); // Get the response as a blob
+            })
+            .then(blob => {
+                // Create a URL for the blob
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `download-${requestno}.zip`; // Set the default filename
+                document.body.appendChild(a);
+                a.click(); // Trigger the download
+                window.URL.revokeObjectURL(url); // Clean up
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to download the file.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        });
+    });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{>head}}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+    <div class=" " id="">
+        <div class=" ">
+            <a href="/catalog" class="nav-item nav-link active"><span class="material-symbols-outlined">arrow_back</span></a>
+        </div>
+    </div>
+    <a href="index.html" class="navbar-brand d-flex align-items-center px-1 px-lg-1">
+        <a href="#" class="navbar-brand">
+            <img src="/image/fav.png" alt="Icon" width="60" height="60" class="d-inline-block align-top">
+        </a>
+    </a>
+    <h4 class="m-0 text-black">Assam GIS Explorer</h4>
+</nav>
+
+<!-- Service Start -->
+<div class="container" id="mapcont">
+    <div class="text-center mx-auto mb-5 wow " style="max-width: 600px;">
+        <h1>GeoSpatial Data Catalog</h1>
+    </div>
+   
+</div>
+<!-- Service End -->
+
+<section class="container" style="background-color: #f4f5f7;">
+  <div class="container py-5 ">
+    <div class="row d-flex justify-content-center align-items-center ">
+     
+            {{!-- <div class="col-md-4 gradient-custom text-center text-white"
+              style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+              <img src="https:"
+                alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
+              <h5>gis assam</h5>
+              <p>Web gis</p>
+              <i class="far fa-edit mb-5"></i>
+            </div> --}}
+
+            {{#each catalogItems}}
+
+            <div class="col-md-8">
+              <div class="card-body p-4">
+                <h6>File Information</h6>
+                <hr class="mt-0 mb-4">
+                <div class="row pt-1">
+                  <div class="col-6 mb-3">
+                    <h6>File Title</h6>
+                    <p class="text-primary">{{this.title}}</p>
+                  </div>
+                  <div class="col-6 mb-3">
+                    <h6>Date </h6>
+                    <p class="text-muted">{{castalogItems.uploaddate}}</p>
+                  </div>
+                </div>
+                <h6>Description</h6>
+                <hr class="mt-0 mb-4">
+                <div class="row pt-1">
+                  <div class="col-12 mb-3">
+                    {{!-- <h6>Most Viewed</h6> --}}
+                    <p class="text-muted">{{this.description}}</p>
+                  </div>
+                </div>
+        
+              </div>
+            </div>
+            {{/each}}
+
+        
+    </div>
+  </div>
+</section>
+
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ol@v9.2.4/dist/ol.js"></script>
+<script>
+
+</script>
+{{>footer}}
+</body>
+</html>
