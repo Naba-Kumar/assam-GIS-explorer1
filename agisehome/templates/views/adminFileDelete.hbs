@@ -193,10 +193,8 @@
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
-                        {{!-- 'Authorization': `Bearer ${token}` // Include the token in the header --}}
                     },
                     body: JSON.stringify({ file_name, workspace, store }),
-                    credentials: 'include' // Ensure cookies or other credentials are sent
                 }).then(response => response.json())
                   .then(data => {
                       console.log('Response data:', data);

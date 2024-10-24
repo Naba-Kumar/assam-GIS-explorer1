@@ -14,7 +14,7 @@ function formDataToObject(formData) {
 }
 
 // Generic function to handle form submissions
-const handleFormSubmit = async(event, url)=> {
+const handleFormSubmit = async(event, url) => {
     event.preventDefault(); // Prevent the default form submission
 
     const formData = new FormData(event.target); // Create a FormData object from the form
@@ -24,17 +24,28 @@ const handleFormSubmit = async(event, url)=> {
     const formDataObj = formDataToObject(formData); // Convert FormData to an object for logging
     console.log('Submitting to URL:', url, 'with data:', formDataObj);
 
-    // const catalogRow = this.closest('option');
-  
+    // First, show confirmation before submitting the data
+    const confirmationResult = await Swal.fire({
+        title: 'Confirm Submission',
+        text: 'Are you sure you want to submit this form?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, submit it!',
+        cancelButtonText: 'No, cancel'
+    });
 
+    if (!confirmationResult.isConfirmed) {
+        // If the user cancels, exit the function
+        return;
+    }
 
+    // Proceed with the fetch request if confirmed
     await fetch(url, {
         method: 'POST',
         redirect: 'follow',
         body: formData,
     })
     .then(response => response.json())
-
     .then(data => {
         console.log('Response data:', data);
         if (data) {
@@ -42,23 +53,12 @@ const handleFormSubmit = async(event, url)=> {
                 title: data.title,
                 text: data.message,
                 confirmButtonText: "OK",
-
                 icon: data.icon
             }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if(url === '/admin/catalog'){
-                        // catalogRow.remove();
-
-                    }
-                    if (result.isConfirmed) {
-                        if(data.redirect != undefined){
-                            window.location.href = data.redirect; // Replace with your desired URL
-                        }
-                    } 
-                  });
-
-         
-            
+                if (result.isConfirmed && data.redirect !== undefined) {
+                    window.location.href = data.redirect; // Replace with your desired URL
+                }
+            });
         } else {
             console.error('Unexpected response format:', data);
             Swal.fire({
@@ -76,7 +76,7 @@ const handleFormSubmit = async(event, url)=> {
             icon: 'error'
         });
     });
-}
+};
 
 // Attach event listeners to each form, passing the appropriate endpoint URL
 document.addEventListener('DOMContentLoaded', function() {

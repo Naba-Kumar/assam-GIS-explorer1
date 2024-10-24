@@ -960,7 +960,7 @@ router.delete('/delete', adminAuthMiddleware, async (req, res) => {
                 await client.query(query, values);
 
                 const shapefileTableQuery = `
-                DELETE FROM catalog WHERE file_name = $1
+                DELETE FROM shapefiles WHERE file_name = $1
             `;
                 const shapefileTableUpdate = [file_name];
                 await client.query(shapefileTableQuery, shapefileTableUpdate);
