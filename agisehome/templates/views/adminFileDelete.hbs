@@ -1,6 +1,7 @@
 {{>adminhead}}
+{{>loader}}
 <div class="wrapper">
- <div id="placeholder" class="js-sidebar"></div>
+    <div id="placeholder" class="js-sidebar"></div>
     <aside id="sidebar" class="js-sidebar">
         <!-- Content For Sidebar -->
         <div class="h-100">
@@ -97,8 +98,8 @@
             </ul>
         </div>
     </aside>
-        <div class="main">
-        <nav class="navbar navbar-expand px-3 border-bottom" >
+    <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
             <button class="btn" id="sidebar-toggle" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -109,62 +110,65 @@
             </div>
         </nav>
 
-        
+
         <main class="content px-3 py-2  bg-adminbg ">
-                        <div class="container-fluid p-4">
+            <div class="container-fluid p-4">
 
-            <div class="input-group mb-3 ">
-                <input type="search" class="form-control " placeholder="Search" aria-label="Search"
-                    aria-describedby="search-addon" />
-                <button type="button" class="btn btn-primary" data-mdb-ripple-init>search</button>
-            </div>
-
-            <div class="card border-0 rounded bg-tablebg">
-                <div class="card-header">
-                    
-                    <h6 class="card-subtitle text-muted p-4 text-center">
-                        Delete File from database and catalogue !
-                    </h6>
+                <div class="input-group mb-3 ">
+                    <input type="search" class="form-control " placeholder="Search" aria-label="Search"
+                        aria-describedby="search-addon" />
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>search</button>
                 </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">File Name</th>
-                                <th scope="col">Workspace</th>
-                                <th scope="col">Store</th>
-                                <th scope="col">status</th>
-                                <th scope="col">Delete</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="card border-0 rounded bg-tablebg">
+                    <div class="card-header">
 
-                            {{#each dataItems}}
-                            <tr>
-                                <th scope="row">{{this.sn}}</th>
-                                <td>{{this.title}}</td>
-                                <td>{{this.file_name}}</td>
-                                <td>{{this.workspace}}</td>
-                                <td>{{this.store}}</td>
-                                <td>{{this.visibility}}</td>
-                                <td>
-                                    <input type="button" class="btn btn-danger" value="delete" file-name="{{this.file_name}}" file-workspace="{{this.workspace}}" file-store="{{this.store}}">
-                                    {{!-- <button class="btn" file-name="{{this.file_name}}" file-workspace="{{this.workspace}}" file-store="{{this.store}}">
-                                        <span class="material-symbols-outlined">delete</span>
-                                    </button> --}}
+                        <h6 class="card-subtitle text-muted p-4 text-center">
+                            Delete File from database and catalogue !
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">id</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">File Name</th>
+                                    <th scope="col">Workspace</th>
+                                    <th scope="col">Store</th>
+                                    <th scope="col">status</th>
+                                    <th scope="col">Delete</th>
 
-                                </td>
-                            </tr>
-                            {{/each}}
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
+                                {{#each dataItems}}
+                                <tr>
+                                    <th scope="row">{{this.sn}}</th>
+                                    <td>{{this.title}}</td>
+                                    <td>{{this.file_name}}</td>
+                                    <td>{{this.workspace}}</td>
+                                    <td>{{this.store}}</td>
+                                    <td>{{this.visibility}}</td>
+                                    <td>
+                                        <input type="button" class="btn btn-danger" value="delete"
+                                            file-name="{{this.file_name}}" file-workspace="{{this.workspace}}"
+                                            file-store="{{this.store}}">
+                                        {{!-- <button class="btn" file-name="{{this.file_name}}"
+                                            file-workspace="{{this.workspace}}" file-store="{{this.store}}">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </button> --}}
 
-                    </table>
+                                    </td>
+                                </tr>
+                                {{/each}}
+
+                            </tbody>
+
+                        </table>
+                    </div>
                 </div>
-            </div>
 
 
                 <!-- Table Element -->
@@ -178,60 +182,76 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-    const actionButtons = document.querySelectorAll('.btn');
+        const actionButtons = document.querySelectorAll('.btn');
 
-    actionButtons.forEach(button => {
-        button.addEventListener('click', async (event) => {
-            const file_name = event.target.getAttribute('file-name');
-            const workspace = event.target.getAttribute('file-workspace');
-            const store = event.target.getAttribute('file-store');
-            const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+        actionButtons.forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const file_name = event.target.getAttribute('file-name');
+                const workspace = event.target.getAttribute('file-workspace');
+                const store = event.target.getAttribute('file-store');
+                const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+                try {
 
+                    // First, show confirmation before submitting the data
+                    const confirmationResult = await Swal.fire({
+                        title: 'Confirm Submission',
+                        text: 'Are you sure you want proceed?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes!',
+                        cancelButtonText: 'No!'
+                    });
 
-            try {
-                const response = await fetch('/admin/delete', {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ file_name, workspace, store }),
-                }).then(response => response.json())
-                  .then(data => {
-                      console.log('Response data:', data);
-                      if (data) {
-                          console.log(data.message);
-                          Swal.fire({
-                              title: data.title,
-                              text: data.message,
-                              confirmButtonText: "OK",
-                              icon: data.icon
-                          }).then((result) => {
-                              if (result.isConfirmed) {
-                                  window.location.reload();
-                              }
-                          });
-                      } else {
-                          console.error('Unexpected response format:', data);
-                          Swal.fire({
-                              title: 'Error',
-                              text: 'Unexpected response format.',
-                              icon: 'error'
-                          });
-                      }
-                  });
+                    if (!confirmationResult.isConfirmed) {
+                        // If the user cancels, exit the function
+                        return;
+                    }
+                    document.getElementById('loader0').style.display = 'block';
+                    const response = await fetch('/admin/delete', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ file_name, workspace, store }),
+                    }).then(response => response.json())
+                        .then(data => {
+                            document.getElementById('loader0').style.display = 'no';
+                            console.log('Response data:', data);
+                            if (data) {
+                                console.log(data.message);
+                                Swal.fire({
+                                    title: data.title,
+                                    text: data.message,
+                                    confirmButtonText: "OK",
+                                    icon: data.icon
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.reload();
+                                    }
+                                });
+                            } else {
+                                console.error('Unexpected response format:', data);
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Unexpected response format.',
+                                    icon: 'error'
+                                });
+                            }
+                        });
 
-            } catch (error) {
-                console.error('There was a problem with the fetch operation:', error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: `There was a problem performing the action.`,
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            }
+                } catch (error) {
+                    document.getElementById('loader0').style.display = 'no';
+                    console.error('There was a problem with the fetch operation:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: `There was a problem performing the action.`,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
         });
     });
-});
 
 </script>
 {{>footer}}

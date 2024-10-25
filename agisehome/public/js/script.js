@@ -27,17 +27,18 @@ const handleFormSubmit = async(event, url) => {
     // First, show confirmation before submitting the data
     const confirmationResult = await Swal.fire({
         title: 'Confirm Submission',
-        text: 'Are you sure you want to submit this form?',
+        text: 'Are you sure you want proceed?',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, submit it!',
-        cancelButtonText: 'No, cancel'
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'No!'
     });
 
     if (!confirmationResult.isConfirmed) {
         // If the user cancels, exit the function
         return;
     }
+    document.getElementById('loader0').style.display = 'block';
 
     // Proceed with the fetch request if confirmed
     await fetch(url, {
@@ -47,6 +48,7 @@ const handleFormSubmit = async(event, url) => {
     })
     .then(response => response.json())
     .then(data => {
+        document.getElementById('loader0').style.display = 'none'
         console.log('Response data:', data);
         if (data) {
             Swal.fire({
@@ -69,6 +71,7 @@ const handleFormSubmit = async(event, url) => {
         }
     })
     .catch(error => {
+        document.getElementById('loader0').style.display = 'none'
         console.error('Fetch error:', error);
         Swal.fire({
             title: 'Error',
@@ -133,8 +136,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 2nd fetch api
 
-function handleAdminLogout (event, url) {
+async function handleAdminLogout (event, url) {
     event.preventDefault(); // Prevent the default form submission
+
+     // First, show confirmation before submitting the data
+     const confirmationResult = await Swal.fire({
+        title: 'Confirm Submission',
+        text: 'Are you sure you want proceed?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'No!'
+    });
+
+    if (!confirmationResult.isConfirmed) {
+        console.log("confirm");
+        
+        // If the user cancels, exit the function
+        return;
+    }
 
 
     fetch(url, { // Send the FormData object to the specified route
@@ -142,13 +162,13 @@ function handleAdminLogout (event, url) {
     })
     .then(response => response.json())
     .then(data => {
+
         console.log(data);
         if (data) {
             Swal.fire({
                 title: data.title,
                 text: data.message,
-                confirmButtonText: "OK",
-
+                confirmButtonText: 'ok',
                 icon: data.icon
             }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
@@ -161,6 +181,7 @@ function handleAdminLogout (event, url) {
         } // Handle the response data
     })
     .catch(error => {
+
         console.error('Error:', error); // Handle any errors
     });
 }
@@ -172,9 +193,25 @@ document.getElementById('adminLogout').addEventListener('click', function(e) {
 // 3rd
 
 
-function handleCatalogView (event, url) {
+async function handleCatalogView (event, url) {
     event.preventDefault(); // Prevent the default form submission
 
+     // First, show confirmation before submitting the data
+     const confirmationResult = await Swal.fire({
+        title: 'Confirm Submission',
+        text: 'Are you sure you want proceed?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'No!'
+    });
+
+    if (!confirmationResult.isConfirmed) {
+        // If the user cancels, exit the function
+        return;
+    }
+
+    // document.getElementById('loader0').style.display = 'block'
 
     fetch(url, { // Send the FormData object to the specified route
         method: 'POST',
@@ -183,11 +220,14 @@ function handleCatalogView (event, url) {
     .then(data => {
         console.log(data);
         if (data) {
+            // document.getElementById('loader0').style.display = 'none'
+
             Swal.fire({
                 title: data.title,
                 text: data.message,
-                confirmButtonText: "OK",
-
+                showCancelButton: true,
+                confirmButtonText: 'Yes!',
+                cancelButtonText: 'No!',
                 icon: data.icon
             }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
@@ -200,13 +240,15 @@ function handleCatalogView (event, url) {
         } // Handle the response data
     })
     .catch(error => {
+        // document.getElementById('loader0').style.display = 'none'
+
         console.error('Error:', error); // Handle any errors
     });
 }
 // Attach event listeners to each form, passing the appropriate endpoint URL
-document.getElementById('adminLogout').addEventListener('click', function(e) {
-    handleCatalogView (e, '/catalog/');
-});
+// document.getElementById('adminLogout').addEventListener('click', function(e) {
+//     handleCatalogView (e, '/catalog/');
+// });
 
 
 

@@ -405,7 +405,10 @@ router.post('/shpuploads', adminAuthMiddleware, shpupload.single('shapefile'), a
 
         console.log(cmd)
 
-        exec(cmd, { env: { ...process.env, PGPASSWORD: process.env.PGPASSWORD } }, async (error, stdout, stderr) => {
+        exec(cmd, { 
+            env: { ...process.env, PGPASSWORD: process.env.PGPASSWORD },
+            maxBuffer: 1024 * 1024 * 10 },
+         async (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 // return res.status(500).send('Error uploading shapefile.');
@@ -839,15 +842,42 @@ router.post('/catalog', adminAuthMiddleware, login.single('id_proof'), async (re
                     password: 'geoserver'
                 }
             })
-                .then(function (response) {
+                .then(async function (response) {
                     console.log(response.data);
                     console.log(response.status);
                     console.log(response.statusText);
                     console.log(response.headers);
                     console.log(response.config);
+
+                    const client = await pool.poolUser.connect();
+                    const visibility = true;
+            
+                    const uploaddate = new Date();
+            
+                    const query = `
+                            INSERT INTO catalog(file_name, file_id, uploaddate, workspace, store, title, description, visibility)
+                            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                        `;
+                    const values = [file_name, file_id, uploaddate, workspace, store, title, description, visibility];
+                    await client.query(query, values);
+            
+                    const shapefileTableQuery = `
+                            UPDATE shapefiles
+                            SET is_added = $1
+                            WHERE file_name = $2
+                        `;
+                    const shapefileTableUpdate = [true, file_name];
+                    await client.query(shapefileTableQuery, shapefileTableUpdate);
+            
+                    client.release();
+            
+                    const data = { message: 'File Published to GeoServer', title: "Success", icon: "success" };
+                    return res.status(201).json(data);
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    console.log("error ------>"+ error);
+                    const data = { message: 'something went wrong', title: "Error", icon: "Danger" };
+                    return res.status(201).json(data);
 
                 })
             // Update existing feature type if necessary
@@ -855,30 +885,7 @@ router.post('/catalog', adminAuthMiddleware, login.single('id_proof'), async (re
         }
 
         // Process database update and response
-        const client = await pool.poolUser.connect();
-        const visibility = true;
-
-        const uploaddate = new Date();
-
-        const query = `
-                INSERT INTO catalog(file_name, file_id, uploaddate, workspace, store, title, description, visibility)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-            `;
-        const values = [file_name, file_id, uploaddate, workspace, store, title, description, visibility];
-        await client.query(query, values);
-
-        const shapefileTableQuery = `
-                UPDATE shapefiles
-                SET is_added = $1
-                WHERE file_name = $2
-            `;
-        const shapefileTableUpdate = [true, file_name];
-        await client.query(shapefileTableQuery, shapefileTableUpdate);
-
-        client.release();
-
-        const data = { message: 'File Published to GeoServer', title: "Success", icon: "success" };
-        return res.status(201).json(data);
+      
 
     } catch (error) {
         // if (error) {
@@ -965,6 +972,17 @@ router.delete('/delete', adminAuthMiddleware, async (req, res) => {
                 const shapefileTableUpdate = [file_name];
                 await client.query(shapefileTableQuery, shapefileTableUpdate);
                 client.release();
+
+
+                const client2 = await pool.poolShp.connect();
+
+                const tabledeleteQuery = `
+                DROP TABLE IF EXISTS ${file_name}
+            `;
+               await client2.query(tabledeleteQuery);
+               client2.release();
+
+                
 
             }).catch(function (err) {
                 // console.log("res del --------------------------lyrerr");

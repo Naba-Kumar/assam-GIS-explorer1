@@ -236,6 +236,21 @@
                 const reply = document.getElementById(replyId).value;
 
                 try {
+
+                     // First, show confirmation before submitting the data
+                    const confirmationResult = await Swal.fire({
+                        title: 'Confirm Submission',
+                        text: 'Are you sure you want proceed?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes!',
+                        cancelButtonText: 'No!'
+                    });
+
+                    if (!confirmationResult.isConfirmed) {
+                        // If the user cancels, exit the function
+                        return;
+                    }
                     const response = await fetch('/admin/queries', {
                         method: 'POST',
                         headers: {

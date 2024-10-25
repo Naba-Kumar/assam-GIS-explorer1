@@ -4,7 +4,9 @@
     {{>head}}
 </head>
 <body onload="loaderFunc()">
+    {{>loader}}
     {{>homeNav}}
+
     <main class="content px-1 py-5 bg-adminbg">
         <div class="container-fluid  container">
             
@@ -73,6 +75,23 @@
             event.preventDefault();
             const requestno = this.getAttribute('data-requestno');
 
+        // First, show confirmation before submitting the data
+            const confirmationResult = await Swal.fire({
+                title: 'Confirm Submission',
+                text: 'Are you sure you want proceed?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes!',
+                cancelButtonText: 'No!'
+            });
+
+            if (!confirmationResult.isConfirmed) {
+                // If the user cancels, exit the function
+                return;
+            }
+
+            document.getElementById('loader0').style.display = 'block';
+
             fetch(`download/${requestno}`, {
                 method: 'GET',
                 headers: {
@@ -80,12 +99,14 @@
                 }
             })
             .then(response => {
+                document.getElementById('loader0').style.display = 'none';
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.blob(); // Get the response as a blob
             })
             .then(blob => {
+                document.getElementById('loader0').style.display = 'none';
                 // Create a URL for the blob
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -97,6 +118,7 @@
                 window.URL.revokeObjectURL(url); // Clean up
             })
             .catch(error => {
+                document.getElementById('loader0').style.display = 'block';
                 console.error('There was a problem with the fetch operation:', error);
                 Swal.fire({
                     title: 'Error!',
@@ -109,5 +131,6 @@
     });
 
     </script>
+    {{>footer}}
 </body>
 </html>

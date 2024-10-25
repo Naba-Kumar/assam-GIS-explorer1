@@ -1,4 +1,5 @@
 {{>adminhead}}
+{{>loader}}
 <div class="wrapper">
  <div id="placeholder" class="js-sidebar"></div>
     <aside id="sidebar" class="js-sidebar">
@@ -249,6 +250,22 @@ class="modal fade" id="exampleModalLong" tabindex="-1"
 
 
                 try {
+                    // First, show confirmation before submitting the data
+                    const confirmationResult = await Swal.fire({
+                        title: 'Confirm Submission',
+                        text: 'Are you sure you want proceed?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes!',
+                        cancelButtonText: 'No!'
+                    });
+
+                    if (!confirmationResult.isConfirmed) {
+                        // If the user cancels, exit the function
+                        return;
+                    }
+                    document.getElementById('loader0').style.display = 'block';
+
                     const response = await fetch('/admin/requests', {
                         method: 'POST',
                         headers: {
@@ -257,7 +274,7 @@ class="modal fade" id="exampleModalLong" tabindex="-1"
                         body: JSON.stringify({ action, email, file_name, requestno }),
                     }) .then(response => response.json())
                 .then(data => {
-                    
+                    document.getElementById('loader0').style.display = 'none';
                     console.log('Response data:', data);
                     if (data) {
                         console.log(data.message)
@@ -274,6 +291,7 @@ class="modal fade" id="exampleModalLong" tabindex="-1"
                             }
                         });
                     } else {
+                        document.getElementById('loader0').style.display = 'none';
                         console.error('Unexpected response format:', data);
                         Swal.fire({
                             title: 'Error',
@@ -284,6 +302,7 @@ class="modal fade" id="exampleModalLong" tabindex="-1"
                 })
 
                 } catch (error) {
+                    document.getElementById('loader0').style.display = 'none';
                     console.error('There was a problem with the fetch operation:', error);
 
                     // Show error alert using SweetAlert
